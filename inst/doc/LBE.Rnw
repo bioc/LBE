@@ -1,0 +1,243 @@
+%\VignetteIndexEntry{LBE Vignette}
+%\VignetteDepends{LBE}
+%\VignetteKeywords{multiple comparisons, false discovery rate, proportion of true null hypotheses}
+%\VignettePackage{LBE}
+
+\documentclass[11pt]{article}
+
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{times}
+\usepackage{comment}
+
+\textwidth=6.2in
+\textheight=8.5in
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newlength{\smallfigwidth}
+\setlength{\smallfigwidth}{6cm}
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textsf{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+
+\title{How to use the LBE package}
+\author{C. Dalmasso}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+
+In the context of genome-wide studies for which a large number of statistical tests are simultaneously performed, the False Discovery Rate
+(FDR) which is defined as the expected proportion of false discoveries \cite{Benjamini} is one of the most used criterion for taking into account the multiple testing problem.
+
+In the framework of estimating procedures based on the marginal distribution of the p-values without assumption on the conditional distribution related to the alternative hypothesis, estimators of the FDR rely on the formula introduced by Storey \cite{Storey1}: 
+
+\begin{equation}
+FDR(\Gamma )=\frac{\pi _{0}\Pr (P\in G|H=0)}{\Pr (P\in G)}  \label{Storey}
+\end{equation}
+
+where $H$ is the variable such that $H=0$ if the null hypothesis $H_{0}$ is true, $H=1$ if the alternative hypothesis $H_{1}$ is true, $\pi _{0}=\Pr(H=0)$ is the probability of not being modified and $P$ is the random variable corresponding to the p-values. 
+
+\bigskip
+
+This document provides a tutorial for using the \Rfunction{LBE} package that contains functions for estimating the proportion of true null hypotheses $\pi _{0}$ and the $FDR$ (or the q-values that are defined for each p-value by q-value$(p_{i})=FDR([0,p_{i}])$). We describe here the implemented functions and illustrate their use with the real dataset from Golub et al. \cite{Golub}. In the last section, the LBE function is compared with the \Rfunction{qvalue} function from the \Rfunction{qvalue} package.
+
+
+\section{The leukemia data set from Golub et al. (1999)}
+
+
+The aim of the study of Golub et al. \cite{Golub} was to identify differentially expressed genes between acute myeloid leukemia (AML) and
+acute lymphoblastic leukemia (ALL). The samples were assayed using Affymetrix Hgu6800 chips and the data on the expression of 7129 genes are
+available in the Bioconductor package \Rfunction{golubEsets}. 
+
+The dataset \Rfunction{golub.pval} provided  with the LBE package contains the p-values obtained from a two-sample t-test analysis. The variance-stabilizing method included in the \Rfunction{vsn} package was applied for normalizing the data.
+
+\bigskip 
+
+<<>>=
+library(LBE)
+data(golub.pval)
+@
+
+
+\section{Implemented functions}
+
+\subsection{\Rfunction{LBE}}
+
+Under the null hypothesis, the p-values are supposed to be uniformly distributed on [0,1] so that $\Pr (P\in \lbrack 0,\gamma ]|H=0)=\gamma $. The FDR estimation is then obtained from the relation (\ref{Storey}) by the separate estimation of $\Pr (P\in \lbrack 0,\gamma ])$ and $\pi _{0}$, the proportion of true null hypotheses. While $\Pr (P\in \lbrack 0,\gamma ])$ can easily be estimated by the empirical cumulative distribution, if no distributional assumption is made for the marginal distribution of the p-values, only an upper bound estimate can be obtained for $\pi _{0}$.
+
+\bigskip 
+
+Let $m$ be the total number of p-values. From a classical two-components mixture model for the distribution of the p-values, we have
+introduced \cite{Dalmasso} a conservatively biased estimator of $\pi _{0}$: 
+
+\begin{equation}
+\widehat{\pi }_{0}=2\frac{1}{m}\sum\limits_{i=1}^{m}P_{i}  \label{initest}
+\end{equation}
+
+From this estimator of $\pi _{0}$, we have demonstrated that under suitable conditions for a function $\varphi $, transformed p-values lead to a less biased estimator of $\pi _{0}$ (see the theorem 1 in \cite{Dalmasso}). In this context, we have considered the functions $\varphi _{a}(P)=-\ln(1-x)^{a},~a\in [1,+\inf[$, and we have demonstrated that these functions lead to a family of estimators for which the bias for $\pi _{0}$ is decreasing with $a$. The obtained results can easily be extended to real values of $a$ leading to the following family of estimators: 
+
+\begin{equation}
+\hat{\pi}_{0(a)}=\frac{\frac{1}{m}\sum_{i=1}^{m}[-\ln (1-p_{i})]^{a}}{\Gamma
+(a+1)},~a\in \lbrack 1,+\inf [.  \label{family}
+\end{equation}
+
+For this family of estimators,an upper bound of the asymptotic variance can be obtained for independent p-values: $\frac{1}{m}\times \left( 
+\frac{\Gamma (2a+1)}{\Gamma (a+1)^{2}}-1\right) $ leading to a confidence interval for $\pi _{0}$. As there is a balance between bias (decreasing as $a$ increase) and variance (increasing as $a$ increase), for a specified number $m$ of tested hypotheses, we have proposed to choose $a$ as the greatest value such that the upper bound of the standard deviation is less than a threshold $l$ for the variance's upper bound. Other rules may obviously be considered and the \Rfunction{LBE} function allows to set $a$ independently from the variance upper bound.
+
+\bigskip
+
+The \Rfunction{LBE} function only requires a vector of p-values as input. We first create the object \Rfunction{LBE.res} by applying the \Rfunction{LBE} function with default arguments. A plot of the q-values versus the p-values is displayed together with the histogram of the p-values and informative numerical values in the legend such as the FDR and the number of rejected null hypotheses. Among the saved results \Rfunction{LBE.res}, we display the estimate of $\pi _{0}$, its confidence interval and the (default) level for the confidence interval.
+Then, we apply the \Rfunction{LBE} function once again by changing the level for the confidence interval and we display the new confidence interval for $\pi _{0}$. The argument plot.type is set to "none" so that the plot is not displayed.
+
+
+
+\begin{center}
+<<fig=true, width = 6, height = 6>>=
+LBE.res <- LBE(golub.pval)
+@
+\end{center}
+\bigskip
+
+<<>>=
+#LBE.res <- LBE(golub.pval)
+names(LBE.res)
+LBE.res$pi0; LBE.res$pi0.ci; LBE.res$ci.level
+LBE.res2 <- LBE(golub.pval, ci.level=0.8,plot.type="none")
+LBE.res2$pi0.ci; LBE.res2$ci.level
+@
+
+\bigskip
+
+If the argument \Rfunction{qvalues} is set to \Rfunction{FALSE}, only $\pi _{0}$ is estimated. Otherwise (default value), the q-values (which are defined for each gene by q-value$(p_{i})=FDR([0,p_{i}])$ are estimated and the \Rfunction{LBE} function returns either the number of significant genes when controlling the FDR at a specific level (the default value for the argument \Rfunction{FDR.level} is 0.05), either the estimated FDR for a specific number of significant genes.
+
+First, we apply the \Rfunction{LBE} function by changing the level at which control the FDR, then we estimate the FDR when 300 genes are declared significant. It is worth noting that the estimated q-values remain unchanged.
+
+\bigskip
+
+<<>>=
+LBE.res3 <- LBE(golub.pval, FDR.level=0.1,plot.type="none")
+LBE.res3$qvalues[1:10]
+LBE.res3$n.significant
+@
+
+\begin{center}
+<<fig=true, width = 6, height = 6>>=
+LBE.res4 <- LBE(golub.pval,FDR.level=NA,n.significant=300)
+@
+\end{center}
+\bigskip
+
+<<>>=
+LBE.res4$qvalues[1:10]
+@
+
+\bigskip
+
+Using the proposed rule for choosing a particular estimator in the family (\ref{family}), the parameter \Rfunction{a} is set according to a threshold \Rfunction{l} for the asymptotic standard deviation. The default value for \Rfunction{l} is 0.05 that is considered to be small enough, but other values can be chosen : the function \Rfunction{LBEa} described below illustrates the relation between \Rfunction{a} and \Rfunction{l} for a fixed number of tested hypotheses.
+
+A particular value for \Rfunction{a} can also be directly set (without using the parameter \Rfunction{l}). Choosing values of \Rfunction{a} less that 1 leads to use the identity function for transforming the p-values, that is to say the estimator (\ref{initest}). 
+
+First we apply the function \Rfunction{LBE} by changing the upper bound for the asymptotic standard deviation, then, we apply \Rfunction{LBE} by arbitrarily setting $a=2$ and finally, we do not transform the p-values (by setting $a=-1$).
+
+\bigskip
+
+<<>>=
+LBE.res5 <- LBE(golub.pval,a=2,l=NA,plot.type="none")
+LBE.res5$a; LBE.res5$l; LBE.res5$pi0; LBE.res5$pi0.ci; LBE.res5$n.significant
+LBE.res6 <- LBE(golub.pval,a=NA,l=0.1,plot.type="none")
+LBE.res6$a; LBE.res6$l; LBE.res6$pi0; LBE.res6$pi0.ci; LBE.res6$n.significant
+LBE.res7 <- LBE(golub.pval,a=-1,l=NA,plot.type="none")
+LBE.res7$a; LBE.res7$l; LBE.res7$pi0; LBE.res7$pi0.ci; LBE.res7$n.significant
+@
+
+\subsection{\Rfunction{LBEplot}}
+
+If \Rfunction{plot.type="main"}, the function \Rfunction{LBEplot}, that is called by the main function \Rfunction{LBE}, displays the plot of the q-values versus the p-values together with the histogram of the p-values. The FDR and the numbers of significant and non significant genes are displayed in the legend.
+
+If \Rfunction{plot.type="multiple"} (default value), the function LBEplot produces four plots: an histogram of the p-values, the plot of the q-values versus the p-values, the number of significant genes versus the q-values and the number of expected false positives by the number of significant genes.
+
+
+
+\begin{center}
+<<fig=true, width = 6, height = 6>>=
+LBEplot(LBE.res,plot.type="multiple")
+@
+\end{center}
+\bigskip
+
+
+\subsection{\Rfunction{LBEa}}
+
+The \Rfunction{LBEa} function is called by the main function \Rfunction{LBE} for choosing the greatest value of \Rfunction{a} such that the upper bound of the asymptotic standard deviation is less than a threshold \Rfunction{l}. A plot illustrating the relation between \Rfunction{a} and \Rfunction{l} for a fixed number of tested hypotheses is displayed.
+
+
+
+\begin{center}
+<<fig=true, width = 6, height = 6>>=
+LBEa(length(golub.pval),l=0.1)
+@
+\end{center}
+\bigskip
+
+
+\subsection{\Rfunction{LBEsummary}}
+
+The function \Rfunction{LBEsummary} is analogous to the function \Rfunction{qsummary} from the \Rfunction{qvalue} package. It reports an estimate and a confidence interval for the proportion of true null hypotheses and presents a table comparing p-values to q-values.
+
+<<>>=
+LBEsummary(LBE.res)
+@
+
+\subsection{\Rfunction{LBEwrite}}
+
+The \Rfunction{LBEwrite} function is analogous to the \Rfunction{qwrite} function from the \Rfunction{qvalue} package. It writes the output of the function \Rfunction{LBE} to a file.
+
+<<>>=
+LBEwrite(LBE.res)
+@
+
+\section{Comparison with the \Rfunction{qvalue} package}
+
+
+The \Rfunction{qvalue} package contains functions for the estimation and presentation of the q-values following the method introduced by Storey and Tibshirani \cite{Storey2}. While the default method for estimating $\pi _{0}$ (in the \Rfunction{qvalue} function) relies on a smoothing method for estimating the marginal density evaluated at one, LBE is based on the expectation of a transformation of the p-values.
+
+As regards to \Rfunction{qvalue}, the results of a simulation study \cite{Dalmasso} indicates good performances for \Rfunction{LBE}. Moreover, the thoretical results we have obtained allow the calculation of a confidence interval for $\pi _{0}$.
+
+We compare here the two methods with the dataset from Golub \it{et al.} \cite{Golub}.
+
+<<>>=
+library(qvalue)
+qvalue.res <- qvalue(golub.pval)
+qsummary(qvalue.res)
+LBEsummary(LBE.res)
+@
+
+
+\begin{thebibliography}{9}
+
+\bibitem{Benjamini} Benjamini Y, Hochberg Y. (1995) Controlling the false discovery rate : a practical and powerful approach to multiple testing. J R Stat Soc Ser B, 57, 289-300.
+
+\bibitem{Dalmasso} Dalmasso, C; Broet, P.; Moreau, T. (2005) A simple procedure for estimating the false discovery rate. Bioinformatics. Bioinformatics, 21: 660 - 668.
+
+\bibitem{Golub} Golub TR, Slonim DK, Tamayo P, Huard C, Gaasenbeek M, Mesirov JP, Coller H, Loh ML, Downing JR, Caligiuri MA, Bloomfield CD and
+Lander ES (1999) Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring, Science, 531-537.
+
+\bibitem{Storey1} Storey JD. (2001) A direct approach to false discovery rates. J R Stat Soc Ser B; 64, 479-498.
+
+\bibitem{Storey2} Storey JD, Tibshirani R. (2003b) Statistical significance for genome-wide studies. Proc Natl Acad Sci, 100, 9440-9445.
+
+\end{thebibliography}
+
+
+\end{document}
