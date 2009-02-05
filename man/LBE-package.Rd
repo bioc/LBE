@@ -7,8 +7,8 @@ Estimation of the proportion of true null hypotheses, the false discovery rate a
 \description{
 The package LBE allows estimating the proportion of true null hypotheses and the false discovery rate. 
 }
-} 
-}
+ 
+
 \details{
 \tabular{ll}{
 Package: \tab LBE\cr
@@ -20,10 +20,10 @@ License: \tab GPL2\cr
 }
 \author{
 Cyril Dalmasso
-Maintainer: Cyril Dalmasso <dalmasso@vjf.inserm.fr>
+Maintainer: Cyril Dalmasso \email{dalmasso@vjf.inserm.fr}
 }
 \references{
-Dalmasso C, Broet P, Moreau T (2005): A simple procedure for estimating the false discovery rate. Bioinformatics. Bioinformatics, 21: 660 - 668.
+Dalmasso C, Broet P, Moreau T (2005): A simple procedure for estimating the false discovery rate. Bioinformatics, 21: 660 - 668.
 
 Storey JD and Tibshirani R. (2003). Statistical significance for genome-wide studies. Proc Natl Acad Sci, 100, 9440-9445.
 }

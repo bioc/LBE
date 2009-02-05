@@ -23,7 +23,8 @@ Invisibly returns the original object.
 }
 \author{ Cyril Dalmasso }
 \note{ 
-  The function LBEsummary is analogous to the function qsummary from the package {qvalue}.
+  The function LBEsummary is analogous to the function qsummary from the
+  package \code{qvalue}.
 }
 \seealso{ \code{\link{LBE}}, \code{\link{LBEplot}}, \code{\link{LBEwrite}}, \code{\link{LBEa}} }
 \examples{

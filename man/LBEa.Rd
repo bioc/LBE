@@ -14,12 +14,12 @@ LBEa(m, l = 0.05, fig = TRUE, a.rng = NA)
   \item{m}{ Total number of tested hypotheses. }
   \item{l}{ Threshold for the upper bound of the asymptotic standard deviation (default value is 0.05). }
   \item{fig}{ Logical value for plotting the standard deviation versus a. }
-  \item{a.rng}{ Range of values of a to consider. If a.rng==NA, a.rng is set such that the standard deviation is less than 0.5. }
+  \item{a.rng}{ Range of values of a to consider. If a.rng == NA, a.rng is set such that the standard deviation is less than 0.5. }
 }
 \details{
 The procedure LBE is based on the expectation of a particular transformation of the p-values leading to a straightforward estimation of the key quantity pi0 that is the proportion of true null hypotheses:
-  $ pi0(a)={(1/m)*sum_{i=1}^{m}[-ln(1-pi)]^a]}/Gamma(a+1) $
-where a belongs to the interval [1;inf[.   
+  \deqn{pi0(a)={(1/m)*\sum_{i=1}^{m}[-\ln(1-pi)]^a]}/\Gamma(a+1) }
+where a belongs to the interval \eqn{[1;inf)}.   
 As there is a balance between bias (decreasing as a increase) and variance (increasing as a increase), for a specified number m of tested hypotheses, we have proposed to choose the greatest value of a such that the upper bound of the asymptotic standard deviation of the estimator of pi0 is smaller than the threshold l.
 The function LBEa allows to plot the standard deviation versus a in order to help for the choice of the threshold l (for a specific number m of tested hypotheses). 
 }
@@ -36,7 +36,7 @@ Dalmasso C, Broet P, Moreau T (2005). A simple procedure for estimating the fals
 ## start
 data(hedenfalk.pval)
 m <- length(hedenfalk.pval)
-LBEa(m,l=0.05)
+LBEa(m,l = 0.05)
 ## end
 }
 \keyword{ misc }

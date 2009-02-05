@@ -4,8 +4,8 @@
 \title{ p-values corresponding to the gene expression data from Golub et al. (1999). }
 \description{
   The aim of the study of Golub et al. \cite{Golub} was to identify differentially expressed genes between acute myeloid leukemia (AML) and acute lymphoblastic leukemia (ALL). 
-  The samples were assayed using Affymetrix Hgu6800 chips and the data on the expression of 7129 genes are available in the Bioconductor package {golubEsets}.
-  The p-values provided here were calculated from a two-sample t-test analysis. The variance-stabilizing method included in the {vsn} package was applied for normalizing the data.
+  The samples were assayed using Affymetrix Hgu6800 chips and the data on the expression of 7129 genes are available in the Bioconductor package \code{golubEsets}.
+  The p-values provided here were calculated from a two-sample t-test analysis. The variance-stabilizing method included in the \code{vsn} package was applied for normalizing the data.
 }
 \usage{data(golub.pval)}
 \format{

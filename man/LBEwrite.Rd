@@ -19,7 +19,8 @@ LBEwrite(LBEobj, filename = "LBE-results.txt")
 
 \author{ Cyril Dalmasso }
 \note{ 
-  The function LBEwrite is analogous to the function qwrite from the package {qvalue}.
+  The function LBEwrite is analogous to the function qwrite from the package
+  \code{qvalue}. 
 }
 \seealso{ \code{\link{LBE}}, \code{\link{LBEplot}}, \code{\link{LBEsummary}}, \code{\link{LBEa}} }
 \examples{
