@@ -1,0 +1,17 @@
+
+importFrom(graphics, abline, hist, layout, legend, par, plot)
+
+importFrom(grDevices, replayPlot)
+
+importFrom(methods, showClass, showMlist)
+
+importFrom(stats, as.ts, coef, dendrapply, deviance, end, formula,
+           frequency, IQR, is.leaf, knots, naprint, optimize, pf,
+           pnorm, print.anova, printCoefmat, pt, qnorm, quantile,
+           reformulate, residuals, start, symnum, terms, time, ts, tsp,
+           write.ftable)
+
+importFrom(utils, browseURL, menu, str, toBibtex, zip.file.extract)
+
+
+export("LBEa","LBEplot","LBE","LBEsummary","LBEwrite")
