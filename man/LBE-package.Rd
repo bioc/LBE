@@ -13,9 +13,9 @@ The package LBE allows estimating the proportion of true null hypotheses and the
 \tabular{ll}{
 Package: \tab LBE\cr
 Type: \tab Package\cr
-Version: \tab 1.3.0\cr
-Date: \tab 2006-12-08\cr
-License: \tab GPL2\cr
+Version: \tab 1.13.2\cr
+Date: \tab 2007-1-10\cr
+License: \tab GPL-2\cr
 }
 }
 \author{
@@ -28,6 +28,6 @@ Dalmasso C, Broet P, Moreau T (2005): A simple procedure for estimating the fals
 Storey JD and Tibshirani R. (2003). Statistical significance for genome-wide studies. Proc Natl Acad Sci, 100, 9440-9445.
 }
 \seealso{
-LBE is an alternative method to the one proposed by Storey and Tibshirani (2003) for estimating the q-values, this latter method being implemented in the package \code{\link[qvalue:qvalue-package]{qvalue}}.
+LBE is an alternative method to the one proposed by Storey and Tibshirani (2003) for estimating the q-values, this latter method being implemented in the package \code{\link[qvalue]{qvalue}}.
 }
 \keyword{ package }
