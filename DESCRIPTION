@@ -1,7 +1,7 @@
 Package: LBE
 Type: Package
 Title: Estimation of the false discovery rate.
-Version: 1.35.0
+Version: 1.35.1
 Date: 2007-01-10
 Author: Cyril Dalmasso
 Maintainer: Cyril Dalmasso <dalmasso@vjf.inserm.fr>

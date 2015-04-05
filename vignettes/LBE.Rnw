@@ -193,7 +193,7 @@ LBEa(length(golub.pval),l=0.1)
 
 \subsection{\Rfunction{LBEsummary}}
 
-The function \Rfunction{LBEsummary} is analogous to the function \Rfunction{qsummary} from the \Rfunction{qvalue} package. It reports an estimate and a confidence interval for the proportion of true null hypotheses and presents a table comparing p-values to q-values.
+The function \Rfunction{LBEsummary} is analogous to the function \Rfunction{summary} from the \Rfunction{qvalue} package. It reports an estimate and a confidence interval for the proportion of true null hypotheses and presents a table comparing p-values to q-values.
 
 <<>>=
 LBEsummary(LBE.res)
@@ -219,7 +219,7 @@ We compare here the two methods with the dataset from Golub \it{et al.} \cite{Go
 <<>>=
 library(qvalue)
 qvalue.res <- qvalue(golub.pval)
-qsummary(qvalue.res)
+summary(qvalue.res)
 LBEsummary(LBE.res)
 @
 
