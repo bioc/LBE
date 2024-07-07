@@ -2,16 +2,17 @@ Package: LBE
 Type: Package
 Title: Estimation of the false discovery rate.
 Version: 1.73.0
-Date: 2007-01-10
+Date: 2024-05-08
 Author: Cyril Dalmasso
-Maintainer: Cyril Dalmasso <dalmasso@vjf.inserm.fr>
+Maintainer: Cyril Dalmasso <cyril.dalmasso@univ-evry.fr>
 Description: LBE is an efficient procedure for estimating the
         proportion of true null hypotheses, the false discovery rate
         (and so the q-values) in the framework of estimating procedures
         based on the marginal distribution of the p-values without
         assumption for the alternative hypothesis.
 Depends: stats
-Imports: graphics, grDevices, methods, stats, utils
+Imports: graphics, stats, utils
 License: GPL-2
 Suggests: qvalue
 biocViews: MultipleComparison
+
