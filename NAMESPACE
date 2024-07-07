@@ -1,10 +1,6 @@
 
 importFrom(graphics, abline, hist, layout, legend, par, plot)
 
-importFrom(grDevices, replayPlot)
-
-importFrom(methods, showClass, showMlist)
-
 importFrom(stats, as.ts, coef, dendrapply, deviance, end, formula,
            frequency, IQR, is.leaf, knots, naprint, optimize, pf,
            pnorm, printCoefmat, pt, qnorm, quantile,
