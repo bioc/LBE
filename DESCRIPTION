@@ -1,7 +1,7 @@
 Package: LBE
 Type: Package
 Title: Estimation of the false discovery rate
-Version: 1.74.0
+Version: 1.75.0
 Date: 2024-05-08
 Author: Cyril Dalmasso
 Maintainer: Cyril Dalmasso <cyril.dalmasso@univ-evry.fr>
